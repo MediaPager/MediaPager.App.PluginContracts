@@ -18,6 +18,19 @@ public sealed record PluginNotification(
     PluginNotificationLevel Level)
 {
     public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
+
+    public PluginError? Error { get; init; }
+}
+
+/// <summary>A plugin-authored error that the host can transport and display without
+/// understanding the plugin's capability or domain.</summary>
+public sealed record PluginError(string Code, string Message, string? Remediation = null);
+
+/// <summary>An operation failed with a user-facing, structured plugin error.</summary>
+public sealed class PluginOperationException(PluginError error, Exception? innerException = null)
+    : Exception(error.Message, innerException)
+{
+    public PluginError Error { get; } = error;
 }
 
 /// <summary>Why a job stopped.</summary>
@@ -37,7 +50,10 @@ public sealed record PluginJobInfo(
     string Title,
     string? Status,
     double? Progress,
-    PluginJobState State);
+    PluginJobState State)
+{
+    public PluginError? Error { get; init; }
+}
 
 /// <summary>A cancellable handle to a long-running job a plugin started. The plugin drives it;
 /// the host only observes and can request cancellation.</summary>
@@ -54,6 +70,10 @@ public interface IPluginJob
     void Complete(string? status = null);
 
     void Fail(string status);
+
+    /// <summary>Fail this job with a structured error. The default preserves compatibility
+    /// with existing job implementations by forwarding the user-facing message.</summary>
+    void FailWithError(PluginError error) => Fail(error.Message);
 }
 
 /// <summary>
@@ -66,8 +86,17 @@ public interface IPluginActivity
     /// <summary>Raise a message into the shared notifications panel.</summary>
     void Notify(string title, string? message = null, PluginNotificationLevel level = PluginNotificationLevel.Info);
 
+    /// <summary>Raise a structured plugin error into the shared notifications panel. The
+    /// default preserves compatibility with existing activity implementations.</summary>
+    void NotifyError(string title, PluginError error, PluginNotificationLevel level = PluginNotificationLevel.Error) =>
+        Notify(title, error.Message, level);
+
     /// <summary>Start a long-running job and return its handle so the plugin can report progress.</summary>
     IPluginJob BeginJob(string title);
+
+    /// <summary>Remove a terminal job owned by this plugin. Existing implementations remain
+    /// compatible and may leave the default no-op behavior in place.</summary>
+    bool ClearJob(IPluginJob job) => false;
 
     IReadOnlyList<PluginJobInfo> Jobs { get; }
 
