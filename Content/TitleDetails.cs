@@ -9,7 +9,13 @@ public sealed record BrowseItem(
     string? Overview = null,
     string? ArtworkUrl = null,
     string? BackdropUrl = null,
-    double? VoteAverage = null);
+    double? VoteAverage = null)
+{
+    public IReadOnlyList<ContentMetadata>? Metadata { get; init; }
+}
+
+/// <summary>A generic labeled value for provider-specific content details.</summary>
+public sealed record ContentMetadata(string Label, string Value);
 
 public sealed record EpisodeInfo(
     int EpisodeNumber,
@@ -42,7 +48,10 @@ public sealed record TitleDetails(
     string? ArtworkUrl = null,
     string? BackdropUrl = null,
     IReadOnlyList<CreditRole>? Credits = null,
-    IReadOnlyList<SeasonInfo>? Seasons = null);
+    IReadOnlyList<SeasonInfo>? Seasons = null)
+{
+    public IReadOnlyList<ContentMetadata>? Metadata { get; init; }
+}
 
 /// <summary>Canonical metadata for backfilling a library entry (for example, during library ingestion).</summary>
 public sealed record EnrichmentData(

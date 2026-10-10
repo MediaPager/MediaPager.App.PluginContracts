@@ -18,7 +18,10 @@ public sealed record ProviderSearchHit(
     string? Overview = null,
     string? ArtworkUrl = null,
     int? CatalogItemId = null,
-    int? CatalogId = null);
+    int? CatalogId = null)
+{
+    public IReadOnlyList<ContentMetadata>? Metadata { get; init; }
+}
 
 /// <summary>
 /// Contributes hits to the unified type-ahead, which fuses core-local library search

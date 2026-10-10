@@ -81,7 +81,10 @@ public sealed record PluginActionContext(
     string? ImageUrl = null,
     string? BackdropUrl = null,
     string? Overview = null,
-    int? Year = null);
+    int? Year = null)
+{
+    public IReadOnlyList<ContentMetadata>? Metadata { get; init; }
+}
 
 /// <summary>Optional capability: contributes positioned action icons to poster cards and
 /// detail screens. The host is action-agnostic — it renders whatever a plugin declares and

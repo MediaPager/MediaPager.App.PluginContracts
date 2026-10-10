@@ -18,11 +18,21 @@ public sealed record StreamResolveRequest(
     int? Episode = null);
 
 /// <summary>
-/// An upstream stream URL. The core validates it (SSRF guard: HTTPS + public IP only),
-/// mints a short-lived session, and proxies playlists/segments anonymously. A plugin
-/// never produces session ids or proxy URLs — only the raw upstream URI.
+/// An upstream stream URL and optional media type. The core validates it (SSRF guard:
+/// HTTPS + public IP only), mints a short-lived session, and proxies media anonymously.
+/// A plugin never produces session ids or proxy URLs — only the raw upstream URI and
+/// generic content-type metadata.
 /// </summary>
-public sealed record StreamResult(Uri UpstreamUri);
+public sealed record StreamResult(Uri UpstreamUri)
+{
+    /// <summary>Optional media type for direct media streams. Null preserves the existing
+    /// HLS default for providers that return a playlist.</summary>
+    public string? ContentType { get; init; }
+
+    /// <summary>Whether the client should play the validated upstream URI directly instead
+    /// of fetching it through the host proxy. Defaults to false for existing providers.</summary>
+    public bool DirectPlayback { get; init; }
+}
 
 /// <summary>Where a stream provider gets its content from. <see cref="Online"/>
 /// providers power the nav "Stream" node (browse the provider's catalog, resolve
