@@ -12,7 +12,10 @@ public sealed record LibraryItemWriteRequest(
     string? BackdropUrl = null,
     string? Overview = null,
     int? Year = null,
-    int? CatalogId = null);
+    int? CatalogId = null)
+{
+    public MusicTrackMetadata? MusicMetadata { get; init; }
+}
 
 public sealed record LibraryItemHandle(int? ItemId, bool Created);
 

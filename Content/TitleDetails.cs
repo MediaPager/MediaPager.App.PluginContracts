@@ -65,4 +65,7 @@ public sealed record EnrichmentData(
     string? ArtworkUrl = null,
     string? BackdropUrl = null,
     IReadOnlyList<string>? Genres = null,
-    IReadOnlyList<CreditRole>? Credits = null);
+    IReadOnlyList<CreditRole>? Credits = null)
+{
+    public MusicTrackMetadata? Music { get; init; }
+}
