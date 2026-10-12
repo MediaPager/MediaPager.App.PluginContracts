@@ -84,6 +84,7 @@ public sealed record PluginActionContext(
     int? Year = null)
 {
     public IReadOnlyList<ContentMetadata>? Metadata { get; init; }
+    public MusicTrackMetadata? MusicMetadata { get; init; }
 }
 
 /// <summary>Optional capability: contributes positioned action icons to poster cards and
