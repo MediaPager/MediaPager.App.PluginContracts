@@ -29,7 +29,13 @@ public interface IMediaPagerPlugin
 ## Supporting types
 
 - `IPluginSettingsStore` — core-hosted, namespaced settings under
-  `plugins.<pluginKey>.<name>`. Not whitelisted; read/write/delete freely.
+  `plugins.<pluginKey>.<name>`. The host binds the instance to the plugin identity and
+  rejects attempts to address another plugin's settings.
+- `IPluginHost` — read-only access to plugins declared as dependencies in the manifest.
+- `IMediaToolBroker` — typed catalog transfers with a fixed transcode-profile enum. The
+  host owns paths, FFmpeg arguments, tool versions, and process execution.
+- `IBrowserAutomationBroker` — bounded public HTTPS text fetches and page navigation that
+  returns only a matched request URL. Plugins never receive a Playwright/browser object.
 - `PluginSettingDefinition` — one data-driven setting field (`String`/`Password`, `Required`,
   `Secret`, `Default`).
 - `MediaKind` — the six content kinds (`Movie`, `Tv`, `Music`, `Podcast`, `Audiobook`, `Book`).
@@ -43,8 +49,8 @@ public interface IMediaPagerPlugin
   exception for ordinary misses — a provider fails clean.
 - Plugins reference **Contracts only**; the host references Contracts; hosts reference Core
   (+ plugins at runtime).
-- The SDK stays dependency-free: shared infrastructure abstractions (e.g. a browser engine)
-  are deliberately deferred — a plugin owns its own dependencies.
+- The SDK stays dependency-free: browser and media interfaces are host broker contracts;
+  plugins do not reference browser engines, tool binaries, Core, or API assemblies.
 
 ## Example skeleton
 

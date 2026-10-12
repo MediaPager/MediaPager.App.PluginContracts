@@ -8,10 +8,11 @@ public enum PluginActionSurface
     DetailScreen,
 }
 
-/// <summary>Which corner of the poster/hero a plugin action icon is anchored to. Multiple
-/// icons in the same corner stack by <see cref="PluginActionDescriptor.Order"/>.</summary>
+/// <summary>Where the host renders a plugin action. Positioned actions stack by
+/// <see cref="PluginActionDescriptor.Order"/> within their selected corner.</summary>
 public enum PluginActionPosition
 {
+    Inline,
     TopLeft,
     TopRight,
     BottomLeft,
@@ -36,6 +37,9 @@ public enum PluginActionScope
     Any,
     StreamItem,
     LibraryItem,
+    Series,
+    Season,
+    Episode,
 }
 
 /// <summary>Known generic host actions plugins may request through a HostAction descriptor.</summary>
@@ -45,9 +49,9 @@ public static class PluginHostActionIds
     public const string EditCatalogItem = "catalog-item.edit";
 }
 
-/// <summary>An action icon a plugin contributes to poster cards and/or detail screens. The
-/// host renders it generically — it never knows what the action does. <see cref="Kinds"/>
-/// filters which catalog types see the icon (null = every kind).</summary>
+/// <summary>An action a plugin contributes to poster cards and/or detail screens. The host
+/// renders it generically — it never knows what the action does. <see cref="Kinds"/> filters
+/// which catalog types see it (null = every kind).</summary>
 public sealed record PluginActionDescriptor(
     string ActionId,
     string Label,
@@ -62,7 +66,10 @@ public sealed record PluginActionDescriptor(
     string? HostActionId = null,
     bool Enabled = true,
     string? AvailabilityMessage = null,
-    string? AvailabilityPluginId = null);
+    string? AvailabilityPluginId = null,
+    string? ConfirmationTitle = null,
+    string? ConfirmationMessage = null,
+    bool ShowLabel = true);
 
 /// <summary>What the user clicked, handed to <see cref="IPluginActions.InvokeActionAsync"/>
 /// for a <see cref="PluginActionClick.Dispatch"/> action. Catalog context (item/type/kind)
@@ -84,6 +91,7 @@ public sealed record PluginActionContext(
     int? Year = null)
 {
     public IReadOnlyList<ContentMetadata>? Metadata { get; init; }
+    public MusicTrackMetadata? MusicMetadata { get; init; }
 }
 
 /// <summary>Optional capability: contributes positioned action icons to poster cards and

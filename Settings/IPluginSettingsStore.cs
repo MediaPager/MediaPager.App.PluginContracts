@@ -1,9 +1,10 @@
 namespace MediaPager.App.PluginContracts;
 
 /// <summary>
-/// Core-hosted settings store, namespaced per plugin. Canonical source is the runtime
-/// settings DB keyed <c>plugins.{pluginKey}.{name}</c>; app configuration is the fallback.
-/// Unlike IRuntimeSettings, plugin keys are not whitelisted and write/delete freely.
+/// Plugin-facing settings view. The host binds this store to the caller's plugin identity;
+/// the legacy <c>pluginKey</c> argument must match that plugin's settings key.
+/// Storage is backed by <c>plugins.{pluginKey}.{name}</c> with app configuration as a
+/// fallback. Plugins must never receive an unscoped host repository.
 /// </summary>
 public interface IPluginSettingsStore
 {

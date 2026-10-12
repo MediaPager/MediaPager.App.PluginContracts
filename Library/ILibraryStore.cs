@@ -12,7 +12,19 @@ public sealed record LibraryItemWriteRequest(
     string? BackdropUrl = null,
     string? Overview = null,
     int? Year = null,
-    int? CatalogId = null);
+    int? CatalogId = null)
+{
+    public MusicTrackMetadata? MusicMetadata { get; init; }
+    public string? SeriesTitle { get; init; }
+    public string? SeriesExternalId { get; init; }
+    public string? SeriesImageUrl { get; init; }
+    public string? SeriesBackdropUrl { get; init; }
+    public string? SeriesOverview { get; init; }
+    public int? SeriesYear { get; init; }
+    public string? SeasonTitle { get; init; }
+    public int? SeasonNumber { get; init; }
+    public int? EpisodeNumber { get; init; }
+}
 
 public sealed record LibraryItemHandle(int? ItemId, bool Created);
 
