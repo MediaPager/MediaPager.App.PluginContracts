@@ -27,6 +27,15 @@ public sealed record MediaTransferRequest(
     string? JobId = null)
 {
     public MusicTrackMetadata? MusicMetadata { get; init; }
+    public string? SeriesTitle { get; init; }
+    public string? SeriesExternalId { get; init; }
+    public string? SeriesImageUrl { get; init; }
+    public string? SeriesBackdropUrl { get; init; }
+    public string? SeriesOverview { get; init; }
+    public int? SeriesYear { get; init; }
+    public string? SeasonTitle { get; init; }
+    public int? SeasonNumber { get; init; }
+    public int? EpisodeNumber { get; init; }
 }
 
 public sealed record MediaToolProgress(double Progress, string Message);
@@ -38,7 +47,12 @@ public interface IMediaToolBroker
 {
     Task<bool> IsDestinationAvailableAsync(int catalogId, string catalogTypeSlug, CancellationToken cancellationToken = default);
 
-    Task<bool> HasOtherStreamItemActionAsync(MediaKind kind, CancellationToken cancellationToken = default);
+    Task<bool> HasOnlineStreamProviderAsync(MediaKind kind, CancellationToken cancellationToken = default);
+
+    Task<bool> HasOtherStreamItemActionAsync(
+        string pluginId,
+        MediaKind kind,
+        CancellationToken cancellationToken = default);
 
     Task<ResolvedStreamSource?> ResolveStreamAsync(PluginActionContext context, CancellationToken cancellationToken = default);
 

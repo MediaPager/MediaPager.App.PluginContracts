@@ -1,6 +1,6 @@
 namespace MediaPager.App.PluginContracts;
 
-/// <summary>Music lookup inputs known by a source provider before a transfer begins.</summary>
+/// <summary>Music lookup inputs known by a source provider before a media transfer begins.</summary>
 public sealed record MusicTrackLookupRequest(
     string Title,
     IReadOnlyList<MusicArtistCredit> Artists,
