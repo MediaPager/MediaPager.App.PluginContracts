@@ -24,18 +24,26 @@ public interface IMediaPagerPlugin
 | `IMetadataProviderPlugin` | Id-based details/enrichment for scanning/updating existing library data. |
 | `ISearchProviderPlugin` | Fuzzy unified-search hits contributed into the type-ahead. |
 | `ISubtitleProviderPlugin` | Subtitle search + fetch; returns **native** content (SRT/VTT). The host converts SRT→WebVTT for browser tracks. |
+| `IPluginScopeSchema` | Declares plugin-owned user scopes. Scope ids are namespaced by the plugin id; action dispatch can require one of those scopes. |
 | `IPluginSettingsSchema` | *(optional)* Declares the settings the plugin reads so the settings UI is data-driven. |
 
 ## Supporting types
 
 - `IPluginSettingsStore` — core-hosted, namespaced settings under
-  `plugins.<pluginKey>.<name>`. The host binds the instance to the plugin identity and
-  rejects attempts to address another plugin's settings.
+  `Settings:Plugins:<plugin-id>:<name>`. The host binds the instance to the plugin identity,
+  rejects attempts to address another plugin's settings, and protects stored values at rest.
+  The short key argument remains for source compatibility and must match the plugin id's
+  final segment.
 - `IPluginHost` — read-only access to plugins declared as dependencies in the manifest.
 - `IMediaToolBroker` — typed catalog transfers with a fixed transcode-profile enum. The
   host owns paths, FFmpeg arguments, tool versions, and process execution.
 - `IBrowserAutomationBroker` — bounded public HTTPS text fetches and page navigation that
   returns only a matched request URL. Plugins never receive a Playwright/browser object.
+- `IPluginScopeSchema` — declare plugin-local scope ids such as `can-manage-item`. For plugin
+  `mediapager.stream.example`, that scope becomes `example:can-manage-item`. Set
+  `PluginActionDescriptor.RequiredScope` to the plugin-local id to have the host hide/disable
+  the action in the SPA and enforce the scope again when it is dispatched. The server accepts
+  only scopes declared by that loaded plugin; plugins cannot grant themselves permissions.
 - `PluginSettingDefinition` — one data-driven setting field (`String`/`Password`, `Required`,
   `Secret`, `Default`).
 - `MediaKind` — the six content kinds (`Movie`, `Tv`, `Music`, `Podcast`, `Audiobook`, `Book`).
