@@ -39,6 +39,8 @@ public interface IMediaPagerPlugin
   host owns paths, FFmpeg arguments, tool versions, and process execution.
 - `IBrowserAutomationBroker` — bounded public HTTPS text fetches and page navigation that
   returns only a matched request URL. Plugins never receive a Playwright/browser object.
+- `ILibraryStore` — catalog and library-item operations exposed only to plugins that declare
+  the `library-store` host capability in their manifest.
 - `IPluginScopeSchema` — declare plugin-local scope ids such as `can-download`. For plugin
   `mediapager.stream.vidsrc`, that scope becomes `vidsrc:can-download`. Set
   `PluginActionDescriptor.RequiredScope` to the plugin-local id to have the host hide/disable
