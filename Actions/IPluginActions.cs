@@ -52,6 +52,7 @@ public static class PluginHostActionIds
 /// <summary>An action a plugin contributes to poster cards and/or detail screens. The host
 /// renders it generically — it never knows what the action does. <see cref="Kinds"/> filters
 /// which catalog types see it (null = every kind).</summary>
+[method: System.Text.Json.Serialization.JsonConstructor]
 public sealed record PluginActionDescriptor(
     string ActionId,
     string Label,
@@ -69,7 +70,34 @@ public sealed record PluginActionDescriptor(
     string? AvailabilityPluginId = null,
     string? ConfirmationTitle = null,
     string? ConfirmationMessage = null,
-    bool ShowLabel = true);
+    bool ShowLabel = true,
+    string? RequiredScope = null)
+{
+    // Keep the pre-scope constructor ABI so already-built community plugins continue to load.
+    public PluginActionDescriptor(
+        string ActionId,
+        string Label,
+        string Icon,
+        PluginActionSurface Surface,
+        PluginActionPosition Position,
+        int Order,
+        IReadOnlyList<MediaKind>? Kinds,
+        PluginActionClick Click,
+        string? UiPath,
+        PluginActionScope Scope,
+        string? HostActionId,
+        bool Enabled,
+        string? AvailabilityMessage,
+        string? AvailabilityPluginId,
+        string? ConfirmationTitle,
+        string? ConfirmationMessage,
+        bool ShowLabel)
+        : this(ActionId, Label, Icon, Surface, Position, Order, Kinds, Click, UiPath, Scope,
+            HostActionId, Enabled, AvailabilityMessage, AvailabilityPluginId, ConfirmationTitle,
+            ConfirmationMessage, ShowLabel, null)
+    {
+    }
+}
 
 /// <summary>What the user clicked, handed to <see cref="IPluginActions.InvokeActionAsync"/>
 /// for a <see cref="PluginActionClick.Dispatch"/> action. Catalog context (item/type/kind)
@@ -92,6 +120,7 @@ public sealed record PluginActionContext(
 {
     public IReadOnlyList<ContentMetadata>? Metadata { get; init; }
     public MusicTrackMetadata? MusicMetadata { get; init; }
+    public IReadOnlyList<string>? UserScopes { get; init; }
 }
 
 /// <summary>Optional capability: contributes positioned action icons to poster cards and
