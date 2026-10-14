@@ -1,6 +1,6 @@
 namespace MediaPager.App.PluginContracts;
 
-/// <summary>The six content kinds. Mirrors the CatalogType/MediaType lookup families.</summary>
+/// <summary>Content kinds used by plugins and catalog items.</summary>
 public enum MediaKind
 {
     Movie,
@@ -9,6 +9,7 @@ public enum MediaKind
     Podcast,
     Audiobook,
     Book,
+    Document,
 }
 
 public static class MediaKindExtensions
@@ -21,6 +22,7 @@ public static class MediaKindExtensions
         MediaKind.Podcast => "podcast",
         MediaKind.Audiobook => "audiobook",
         MediaKind.Book => "book",
+        MediaKind.Document => "document",
         _ => throw new ArgumentOutOfRangeException(nameof(kind), kind, "Unknown media kind."),
     };
 
@@ -32,6 +34,7 @@ public static class MediaKindExtensions
         MediaKind.Podcast => "podcasts",
         MediaKind.Audiobook => "audiobooks",
         MediaKind.Book => "books",
+        MediaKind.Document => "docs",
         _ => throw new ArgumentOutOfRangeException(nameof(kind), kind, "Unknown media kind."),
     };
 
@@ -43,6 +46,7 @@ public static class MediaKindExtensions
         "podcast" or "podcasts" => MediaKind.Podcast,
         "audiobook" or "audiobooks" => MediaKind.Audiobook,
         "book" or "books" => MediaKind.Book,
+        "document" or "documents" or "doc" or "docs" => MediaKind.Document,
         _ => throw new ArgumentOutOfRangeException(nameof(slug), slug, "Unknown media kind slug."),
     };
 }

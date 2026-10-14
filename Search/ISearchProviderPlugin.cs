@@ -3,7 +3,10 @@ namespace MediaPager.App.PluginContracts;
 public sealed record SearchRequest(
     string? Query,
     int Limit,
-    IReadOnlyList<MediaKind>? SupportedStreamKinds = null);
+    IReadOnlyList<MediaKind>? SupportedStreamKinds = null,
+    // Optional local-library scope; both null means broad search.
+    string? MediaTypeSlug = null,
+    string? CatalogTypeSlug = null);
 
 /// <summary>A unified-search hit contributed by a provider. SourceKey lets the UI route the
 /// hit back to its source. (Named ProviderSearchHit to avoid clashing with the API's wire
