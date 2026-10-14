@@ -20,4 +20,11 @@ public sealed record LibraryItemHit(
 public interface ILibraryQuery
 {
     Task<IReadOnlyList<LibraryItemHit>> SearchAsync(string query, int limit, CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<LibraryItemHit>> SearchAsync(
+        string query,
+        int limit,
+        string? mediaTypeSlug,
+        string? catalogTypeSlug,
+        CancellationToken cancellationToken = default);
 }
