@@ -27,4 +27,12 @@ public interface ILibraryQuery
         string? mediaTypeSlug,
         string? catalogTypeSlug,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<LibraryItemHit>> SearchAsync(
+        string query,
+        int limit,
+        string? mediaTypeSlug,
+        string? catalogTypeSlug,
+        int? catalogId,
+        CancellationToken cancellationToken = default);
 }
