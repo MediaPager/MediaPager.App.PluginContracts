@@ -35,15 +35,17 @@ public interface IMediaPagerPlugin
   The short key argument remains for source compatibility and must match the plugin id's
   final segment.
 - `IPluginHost` — read-only access to plugins declared as dependencies in the manifest.
+- `IPluginEmailSender` — optional `email-sending` host capability for sending rendered messages
+  through the host's selected provider; plugins do not select an email provider themselves.
 - `IMediaToolBroker` — typed catalog transfers with a fixed transcode-profile enum. The
   host owns paths, FFmpeg arguments, tool versions, and process execution.
 - `IBrowserAutomationBroker` — bounded public HTTPS text fetches and page navigation that
   returns only a matched request URL. Plugins never receive a Playwright/browser object.
 - `ILibraryStore` — catalog and library-item operations exposed only to plugins that declare
   the `library-store` host capability in their manifest.
-- `IPluginScopeSchema` — declare plugin-local scope ids such as `can-manage-item`. For plugin
-  `mediapager.stream.example`, that scope becomes `example:can-manage-item`. Set
-  `PluginActionDescriptor.RequiredScope` to the plugin-local id to have the host hide/disable
+- `IPluginScopeSchema` — declare plugin-local permissions such as `can-manage-item`. The host
+  prefixes the id with the plugin's final id segment (for example, `example:can-manage-item`).
+  Set `PluginActionDescriptor.RequiredScope` to the plugin-local id to have the host hide/disable
   the action in the SPA and enforce the scope again when it is dispatched. The server accepts
   only scopes declared by that loaded plugin; plugins cannot grant themselves permissions.
 - `PluginSettingDefinition` — one data-driven setting field (`String`/`Password`, `Required`,
