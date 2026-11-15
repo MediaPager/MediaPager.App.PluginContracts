@@ -32,6 +32,12 @@ public sealed record StreamResult(Uri UpstreamUri)
     /// <summary>Whether the client should play the validated upstream URI directly instead
     /// of fetching it through the host proxy. Defaults to false for existing providers.</summary>
     public bool DirectPlayback { get; init; }
+
+    /// <summary>Optional request headers the host attaches when it fetches this stream and
+    /// every playlist/segment it references through the proxy. Use it for upstreams that
+    /// require request metadata (for example a referer) the client cannot supply. The host
+    /// drops framing/hop-by-hop headers and keeps the values provider-neutral.</summary>
+    public IReadOnlyDictionary<string, string>? RequestHeaders { get; init; }
 }
 
 /// <summary>Where a stream provider gets its content from. <see cref="Online"/>

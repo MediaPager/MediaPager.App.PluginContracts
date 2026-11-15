@@ -14,6 +14,14 @@ public interface IBrowserAutomationBroker
 {
     Task<string> GetPublicTextAsync(Uri uri, CancellationToken cancellationToken = default);
 
+    /// <summary>Fetch public text with optional request headers the upstream requires.
+    /// The default implementation ignores them so existing brokers keep working.</summary>
+    Task<string> GetPublicTextAsync(
+        Uri uri,
+        IReadOnlyDictionary<string, string>? requestHeaders,
+        CancellationToken cancellationToken = default) =>
+        GetPublicTextAsync(uri, cancellationToken);
+
     Task<string?> NavigateAndWaitForRequestAsync(
         BrowserAutomationRequest request,
         CancellationToken cancellationToken = default);
