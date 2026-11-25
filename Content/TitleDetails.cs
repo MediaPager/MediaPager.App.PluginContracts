@@ -12,6 +12,8 @@ public sealed record BrowseItem(
     double? VoteAverage = null)
 {
     public IReadOnlyList<ContentMetadata>? Metadata { get; init; }
+    /// <summary>Optional plugin-local permission needed to view this item.</summary>
+    public string? RequiredScope { get; init; }
 }
 
 /// <summary>A generic labeled value for provider-specific content details.</summary>
@@ -51,6 +53,8 @@ public sealed record TitleDetails(
     IReadOnlyList<SeasonInfo>? Seasons = null)
 {
     public IReadOnlyList<ContentMetadata>? Metadata { get; init; }
+    /// <summary>Optional plugin-local permission needed to view this item.</summary>
+    public string? RequiredScope { get; init; }
 }
 
 /// <summary>Canonical metadata for backfilling a library entry (for example, during library ingestion).</summary>

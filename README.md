@@ -24,6 +24,7 @@ public interface IMediaPagerPlugin
 | `IMetadataProviderPlugin` | Id-based details/enrichment for scanning/updating existing library data. |
 | `ISearchProviderPlugin` | Fuzzy unified-search hits contributed into the type-ahead. |
 | `ISubtitleProviderPlugin` | Subtitle search + fetch; returns **native** content (SRT/VTT). The host converts SRT→WebVTT for browser tracks. |
+| `IAgentPlugin` | Recurring catalog agents (`agents` type): `GetAgentsAsync` descriptors plus `RunAsync`; the host scheduler honours each descriptor's enabled flag and interval. |
 | `IPluginScopeSchema` | Declares plugin-owned user scopes. Scope ids are namespaced by the plugin id; action dispatch can require one of those scopes. |
 | `IPluginSettingsSchema` | *(optional)* Declares the settings the plugin reads so the settings UI is data-driven. |
 
@@ -43,6 +44,9 @@ public interface IMediaPagerPlugin
   returns only a matched request URL. Plugins never receive a Playwright/browser object.
 - `ILibraryStore` — catalog and library-item operations exposed only to plugins that declare
   the `library-store` host capability in their manifest.
+- `ICatalogScanStore` — read/upsert/remove catalog items and their scan identity fields,
+  exposed only to plugins that declare the `catalog-scanning` host capability. Paths are
+  validated against the owning catalog folder by the host.
 - `IPluginScopeSchema` — declare plugin-local permissions such as `can-manage-item`. The host
   prefixes the id with the plugin's final id segment (for example, `example:can-manage-item`).
   Set `PluginActionDescriptor.RequiredScope` to the plugin-local id to have the host hide/disable

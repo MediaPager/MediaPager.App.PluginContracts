@@ -28,6 +28,8 @@ public sealed record ProviderSearchHit(
     int? CatalogId = null)
 {
     public IReadOnlyList<ContentMetadata>? Metadata { get; init; }
+    /// <summary>Optional plugin-local permission needed to include this hit.</summary>
+    public string? RequiredScope { get; init; }
 }
 
 /// <summary>

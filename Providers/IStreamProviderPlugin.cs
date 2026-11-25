@@ -15,7 +15,12 @@ public sealed record StreamResolveRequest(
     string ExternalId,
     MediaKind Kind,
     int? Season = null,
-    int? Episode = null);
+    int? Episode = null)
+{
+    /// <summary>Optional provider-defined choice of stream for the external item. This lets
+    /// one media item keep a stable external id while exposing multiple playable variants.</summary>
+    public string? StreamVariantId { get; init; }
+}
 
 /// <summary>
 /// An upstream stream URL and optional media type. The core validates it (SSRF guard:
@@ -38,6 +43,9 @@ public sealed record StreamResult(Uri UpstreamUri)
     /// require request metadata (for example a referer) the client cannot supply. The host
     /// drops framing/hop-by-hop headers and keeps the values provider-neutral.</summary>
     public IReadOnlyDictionary<string, string>? RequestHeaders { get; init; }
+
+    /// <summary>Optional plugin-local permission needed to resolve this stream.</summary>
+    public string? RequiredScope { get; init; }
 }
 
 /// <summary>Where a stream provider gets its content from. <see cref="Online"/>

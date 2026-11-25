@@ -24,6 +24,13 @@ public sealed record PluginSettingDefinition(
     string? Description = null,
     string? Placeholder = null)
 {
+    /// <summary>When true, only a SuperAdmin may change this setting.</summary>
+    public bool SuperAdminOnly { get; init; }
+
+    /// <summary>When true, omit this setting from the host's generic editor; a plugin-owned
+    /// settings UI may still manage it through the normal plugin settings API.</summary>
+    public bool HideFromGenericUi { get; init; }
+
     // Preserve the constructor ABI used by already-built community plugins.
     public PluginSettingDefinition(
         string Key,
